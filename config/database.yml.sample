@@ -1,0 +1,24 @@
+base: &base
+  adapter: postgis
+  encoding: unicode
+  pool: 5
+  username: postgres
+  password:
+  su_username: postgres
+  su_password:
+  host: 127.0.0.1
+  port: 15432
+  schema_search_path: "public,postgis"
+  script_dir: /opt/boxen/homebrew/Cellar/postgis/2.0.3/share/postgis
+
+development:
+  <<: *base
+  database: demo_development
+
+test:
+  <<: *base
+  database: demo_test
+
+production:
+  <<: *base
+  database: demo_production
