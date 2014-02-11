@@ -13,12 +13,12 @@ base: &base
 
 development:
   <<: *base
-  database: demo_development
+  database: base_development
 
 test:
   <<: *base
-  database: demo_test
+  database: base_test
 
 production:
   <<: *base
-  database: demo_production
+  database: base_production
