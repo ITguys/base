@@ -47,7 +47,7 @@ def replace_file(file_name, from, to)
   File.open(file_name, "r+") do |f|
     out = ""
     f.each do |line|
-        out << line.gsub(from, to)
+      out << line.gsub(from, to)
     end
     f.pos = 0
     f.print out
@@ -83,7 +83,7 @@ puts_section "Configure" do
 end
 
 puts_line "Install gems..." do
-	`export BUNDLE_GEMFILE=$pwd/Gemfile-dev`
+  `export BUNDLE_GEMFILE=$pwd/Gemfile-dev`
   `bundle install`
 end
 
