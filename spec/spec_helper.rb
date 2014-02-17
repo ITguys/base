@@ -6,32 +6,33 @@ require 'rspec/rails'
 require 'rspec/autorun'
 require 'pg'
 require 'database_cleaner'
-require 'active_record/fixtures'
 require 'factory_girl'
 #uncomment the following line to use spork with the debugger
-#require 'spork/ext/ruby-debug'
 
 Spork.prefork do
 
   Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
+  DatabaseCleaner.strategy = :transaction
 
   # Checks for pending migrations before tests are run.
   # If you are not using ActiveRecord, you can remove this line.
   ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
 
   RSpec.configure do |config|
-    config.before :suite do
+
+    config.after(:each) do
+      DatabaseCleaner.clean_with :truncation
     end
 
-    config.before :all do
-    end
 
-    config.before :each do
-    end
+    # config.before :suite do
+    # end
 
-    config.after :each do
-      DatabaseCleaner.clean
-    end
+    # config.before :all do
+    # end
+
+    # config.before :each do
+    # end
     # ## Mock Framework
     #
     # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
@@ -41,12 +42,13 @@ Spork.prefork do
     # config.mock_with :rr
 
     # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-    config.fixture_path = "#{::Rails.root}/spec/fixtures"
+    # config.fixture_path = "#{::Rails.root}/spec/fixtures"
+    config.include FactoryGirl::Syntax::Methods
 
     # If you're not using ActiveRecord, or you'd prefer not to run each of your
     # examples within a transaction, remove the following line or assign false
     # instead of true.
-    config.use_transactional_fixtures = true
+    # config.use_transactional_fixtures = true
 
     # If true, the base class of anonymous controllers will be inferred
     # automatically. This will be the default behavior in future versions of
