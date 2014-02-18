@@ -1,4 +1,4 @@
-source 'https://rubygems.org'
+source 'http://ruby.taobao.org'
 
 gem 'rails', '~> 4.0.0'
 
@@ -32,7 +32,12 @@ end
 
 group :development do
   gem 'capistrano'
-  gem 'thin'
+	gem 'capistrano-rvm'
+	gem 'capistrano-bundler', '~> 1.1.2'
+	gem 'capistrano-rails', '~> 1.1'
+	gem 'capistrano-chruby', '~> 0.1.1'
+	gem "puma"
+	gem "rubysl", "~> 2.0", platform: :rbx
 end
 
 group :test do
@@ -42,4 +47,5 @@ group :test do
   gem 'spork-rails'
   gem "ZenTest"
   gem "autotest-rails"
+	gem 'autotest-growl'
 end

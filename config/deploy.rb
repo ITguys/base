@@ -1,14 +1,15 @@
 # config valid only for Capistrano 3.1
 lock '3.1.0'
 
-set :application, 'my_app_name'
-set :repo_url, 'git@example.com:me/my_repo.git'
+set :application, 'base'
+set :repo_url, 'git@github.com:ITguys/base.git'
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
+set :branch, :staging
 
 # Default deploy_to directory is /var/www/my_app
-# set :deploy_to, '/var/www/my_app'
+set :deploy_to, '/var/www/base'
 
 # Default value for :scm is :git
 # set :scm, :git
@@ -21,7 +22,7 @@ set :repo_url, 'git@example.com:me/my_repo.git'
 
 # Default value for :pty is false
 # set :pty, true
-
+# set :forward_agent, true
 # Default value for :linked_files is []
 # set :linked_files, %w{config/database.yml}
 
