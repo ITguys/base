@@ -11,6 +11,26 @@ set :branch, :staging
 # Default deploy_to directory is /var/www/my_app
 set :deploy_to, '/var/www/base'
 
+set :rbenv_type, :deplyer # or :system, depends on your rbenv setup
+set :rbenv_ruby, '2.1.0p0'
+set :rbenv_prefix, "RBENV_ROOT=#{fetch(:rbenv_path)} RBENV_VERSION=#{fetch(:rbenv_ruby)} #{fetch(:rbenv_path)}/bin/rbenv exec"
+set :rbenv_map_bins, %w{rake gem bundle ruby rails}
+set :rbenv_roles, :all # default value
+# set :rbenv_ruby, '2.1.0p0'
+namespace :rbenv do
+	desc 'rbenv install'
+	task :install do
+		on roles(:all), in: :sequence, wait: 5 do
+			execute %{$ git clone https://github.com/sstephenson/rbenv.git ~/.rbenv}
+			execute %{echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bash_profile}
+			execute %{echo 'eval "$(rbenv init -)"' >> ~/.bash_profile}
+			execute %{exec $SHELL -l}
+			execute %{git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build}
+			execute %{rbenv install -v 2.1.0p0}
+			execute %{rbenv rehash}
+		end
+	end
+end
 # Default value for :scm is :git
 # set :scm, :git
 
