@@ -1,6 +1,7 @@
 Base::Application.routes.draw do
-  resources :sessions, only: [:new, :create, :destory]
+  resources :sessions, only: :create
   resources :password_resets, only: []
-  get "sessions/new"
+  get 'logout' => 'sessions#destroy', :as => 'logout'
+  get 'login' => 'sessions#new', :as => 'login'
   root 'posts#index'
 end

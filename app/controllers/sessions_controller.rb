@@ -10,7 +10,7 @@ class SessionsController < ApplicationController
   def create
     @user = login(params[:email],params[:password],params[:remember])
     if @user
-      redirect_back_or_to '/'
+      redirect_back_or_to root_path
     else
       flash.now[:error] = "Login failed."
       render :action => "new"
@@ -19,6 +19,6 @@ class SessionsController < ApplicationController
 
   def destroy
     logout
-    redirect_to(:users, :notice => 'Logged out!')
+    redirect_to '/login', :notice => 'Logged out!'
   end
 end
