@@ -1,5 +1,9 @@
 class PasswordResetsController < ApplicationController
   skip_before_filter :require_login
+  layout 'sessions'
+
+  def new
+  end
 
   def create
     @user = User.find_by_email(params[:email])
@@ -14,7 +18,7 @@ class PasswordResetsController < ApplicationController
   end
 
   def update
-    @token = params[:token]
+    @token = params[:id]
     @user = User.load_from_reset_password_token(@token)
     not_authenticated if !@user
     @user.password_confirmation = params[:user][:password_confirmation]
