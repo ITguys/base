@@ -11,6 +11,8 @@ FactoryGirl.define do
     end
     sequence(:name) { |n| "#{user_name}#{n}" }
     email {"#{name}@example.com".downcase}
+    password 'Aa111111'
+    password_confirmation 'Aa111111'
     factory :manager do
       user_name 'Manager'
     end

@@ -12,7 +12,7 @@ class Manage::ApplicationController < ApplicationController
   protected
 
   def not_authenticated
-    redirect_to new_session_path, alert: "Please login first."
+    redirect_to '/login', alert: "Please login first."
   end
 
 end
