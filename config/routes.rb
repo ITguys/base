@@ -14,6 +14,7 @@ Base::Application.routes.draw do
       root 'application#index'
       resources :categories
     end
+    resources :users
   end
 
   root 'manage/application#index'
