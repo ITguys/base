@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe User do
   before(:each) do
-    @user = create(:user)
+    @user = create(:contact).user
   end
 
   it 'check the user if locked' do

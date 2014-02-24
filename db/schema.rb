@@ -35,7 +35,7 @@ ActiveRecord::Schema.define(version: 20140223151529) do
   end
 
 # Could not dump table "users" because of following NoMethodError
-#   undefined method `access_method' for #<RGeo::ActiveRecord::SpatialIndexDefinition:0x007fe31121c630>
+#   undefined method `access_method' for #<RGeo::ActiveRecord::SpatialIndexDefinition:0x007f887468dab8>
 
   create_table "postgis.spatial_ref_sys", id: false, force: true do |t|
     t.integer "srid",                   null: false

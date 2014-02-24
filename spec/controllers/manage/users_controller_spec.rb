@@ -2,21 +2,21 @@ require 'spec_helper'
 
 describe Manage::UsersController do
   before(:each) do
-    @user = create(:user)
+    @user = create(:contact).user
     session[:user_id] = @user.id
   end
 
   describe "GET 'index'" do
     it "display user list, render the index template" do
       10.times { create(:user) }
-      users = User.order('updated_at DESC')
+      users = User.order('updated_at DESC').page(1).per(AppConfig.paginate.per_page)
       get 'index'
       expect(assigns[:users]).to eq(users)
       expect(response).to render_template('index')
     end
 
     it 'display user list with page number' do
-      100.times { create(:user) }
+      20.times { create(:user) }
       users = User.order('updated_at DESC').page(2).per(AppConfig.paginate.per_page)
       get 'index', page: 2
       expect(assigns[:users]).to eq(users)
@@ -38,25 +38,24 @@ describe Manage::UsersController do
 
   describe "POST 'create'" do
     before(:all) do
-      user = User.new(name: 'Test User', password: 'password', password_confirmation: 'password')
-      contact = user.build_contact
-      @user_attributes = user.attributes
+      contact = User.new.build_contact
+      @user_attributes = {name: 'Test User', password: 'Aa111111', password_confirmation: 'Aa111111'}
       @user_attributes['contact_attributes'] = contact.attributes
     end
 
     it 'when created failed, render the new template, the error messages is present' do
-      post 'create', @user_attributes
-      expect(assigns[:user].error_messages).to be_present
+      post 'create', user: @user_attributes
+      expect(assigns[:user].errors.messages).to be_present
       expect(response).to render_template('new')
     end
 
     it 'when created success, redirect to the index page, shown flash[:success] and the new user on it' do
-      @user_attributes['email'] = 'test_user@example.com'
-      post 'create', @user_attributes
-      new_created_user = User.find_by_email(@user_attributes['email'])
+      @user_attributes[:email] = 'test_user@example.com'
+      post 'create', user: @user_attributes
       expect(response).to redirect_to(manage_users_path)
+      new_created_user = User.find_by_email(@user_attributes[:email])
       expect(flash[:success]).to be_present
-      expect(assigns[:users].first).to eq(new_created_user)
+      expect(new_created_user).to be_present
     end
   end
 
@@ -69,29 +68,26 @@ describe Manage::UsersController do
   end
 
   describe "PATCH 'update'" do
-    before(:each) do
-      @user.name = 'Changed Name'
-      @attributes = @user.attributes
-      @attributes['contact_attributes'] = @user.contact.attributes
+    before(:all) do
+      @changed_attributes = {name: 'Changed Name', contact_attributes: { mobile_phone: '0123456' }}
     end
     it "when updated failed, render the edit template, the error masswges is present" do
-      patch 'update', User.new.attributes, id: @user.id
+      patch 'update', user: User.new.attributes, id: @user.id
       expect(response).to render_template('edit')
-      expect(assigns[:user].error_messages).to be_present
+      expect(assigns[:user].errors.messages).to be_present
     end
 
     it "when updated success, redirect to the index page, shown flash[:success] and the user on it" do
-      patch 'update', @attributes, id: @user.id
+      patch 'update', user: @changed_attributes, id: @user.id
       expect(response).to redirect_to(manage_users_path)
       expect(flash[:success]).to be_present
-      expect(assigns[:users].first).to eq(@user)
+      expect(@user.reload.name).to eq(@changed_attributes[:name])
     end
 
-    it "when the notify_user be checked, send the notification via email so the user's reset_password_token be present" do
-      @attributes['notify_user'] = '1'
-      expect(@user.reset_password_token).to be_nil
-      patch 'update', @attributes, id: @user.id
-      expect(@user.reset_password_token).to be_present
+    it "when the notify_user be checked, send the notification via email" do
+      @changed_attributes[:notify_user] = '1'
+      patch 'update', user: @changed_attributes, id: @user.id
+      expect(assigns[:user].notify_user).to eq('1')
     end
   end
 
