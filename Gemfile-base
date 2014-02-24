@@ -46,6 +46,8 @@ group :test do
   gem 'database_cleaner'
   gem 'spork-rails'
   gem "ZenTest"
-  gem "autotest-rails"
-	gem 'autotest-growl'
+	gem 'guard-rspec', '~> 2.5.0'
+	gem 'guard-spork', '~> 1.5.0'
+  #gem "autotest-rails"
+	#gem 'autotest-growl'
 end
