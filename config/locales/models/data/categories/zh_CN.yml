@@ -1,0 +1,9 @@
+zh-CN:
+  activerecord:
+    models:
+      "data/category": 分类
+    attributes:
+      "data/category":
+        name: 名称
+        parent_id: 父ID
+        description: 描述

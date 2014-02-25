@@ -1,0 +1,54 @@
+.col-sm-8.col-md-10
+  .container.col-sm-10.col-md-12
+    /! 标题
+    - category = @data_category
+    - show = !%w[new edit].include?(params[:action]) && category.valid?
+    h1 #{t(show ? :show : category.new_record? ? :new : :edit)} #{category.class.model_name.human}
+    - if show && category.active?
+      = link_to t(:show), [:manage, category], class: "btn btn-default"
+      = link_to t(:edit), [:edit, :manage, category], class: "btn btn-default"
+      = link_to t(:copy), new_manage_data_category_path(id: category.id), class: "btn btn-default"
+      = link_to t(:destroy), [:manage, category], method: :delete, confirm: t(:are_you_sure), class: "btn btn-default"
+    hr
+    /! 错误提示 样式1
+    - if %w[create update destroy].include?(params[:action])
+      .row
+        - if category.valid?
+          .alert.alert-danger
+            p #{t(params[:action])} #{t(:successful)}
+        - else
+          .alert.alert-success
+            p #{t(params[:action])} #{t(:failed)}
+
+    /! 表单
+    .row
+      = form_for category, url: [:manage, category], method: category.new_record? ? :post : :put, html: { multipart: true, role: "form", class: 'form-horizontal'} do |f|
+        /! 输入框
+        .form-group
+          = f.label :name, class: 'col-sm-2 control-label'
+          .col-sm-4
+            - if show
+              = category.name
+            - else
+              = f.text_field :name, placeholder: t(:please_fill_in_the_data), id: 'label_1', class: 'form-control'
+        /! 输入框 End
+        /! select
+        .form-group
+          = f.label :parent_id, class: 'col-sm-2 control-label'
+          .col-sm-4
+            - if show
+              = category.parent_id
+            - else
+              = f.select :parent_id, options_for_select(Data::Category.all.map{|a| [a.name, a.id]}), class: 'form-control', include_blank: true
+        /! select End
+        /! 输入框
+        .form-group
+          = f.label :description, class: 'col-sm-2 control-label'
+          .col-sm-4
+            - if show
+              = category.description
+            - else
+              = f.text_area :description, placeholder: t(:please_fill_in_the_data), id: 'label_1', class: 'form-control', rows: 5
+        /! 输入框 End
+        = render partial: "manage/shared/form_submit"
+    /! 表单 End

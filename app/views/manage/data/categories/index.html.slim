@@ -1,0 +1,38 @@
+- klass = @data_categories.scoped.arel.engine
+nav.navbar.navbar-default role="navigation"
+  form.navbar-form.navbar-left role="search"
+    .form-group
+      = link_to t(:new), new_manage_data_category_path, class: 'btn btn-default'
+
+.panel.panel-default
+  /! Default panel contents
+  .panel-heading
+    = klass.model_name.human
+    | (#{@data_categories.size})
+  /! Table
+  table.table
+    thead
+      - %w[id name parent_id description updated_at created_at actions].each do |field|
+        th
+          = klass.human_attribute_name(field)
+    tbody
+      - @data_categories.each do |category|
+        tr
+          td= category.id
+          td= category.name
+          td= category.parent_id
+          td= category.description
+          td= category.updated_at.try(:to_s)
+          td= category.created_at.try(:to_s)
+          td
+            .btn-group.dropup
+                button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                  = t(:edit)
+                  span.caret
+                ul.dropdown-menu
+                  li = link_to t(:show), [:manage, category]
+                  li = link_to t(:edit), [:manage, category]
+                  li = link_to t(:copy), new_manage_data_category_path(id: category.id)
+                  li = link_to t(:delete), [:manage, category], method: :delete, confirm: t(:are_you_sure)
+/! 分页
+= paginate @data_categories
