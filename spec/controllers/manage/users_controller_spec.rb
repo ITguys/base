@@ -37,7 +37,7 @@ describe Manage::UsersController do
   end
 
   describe "POST 'create'" do
-    before(:all) do
+    before(:each) do
       contact = User.new.build_contact
       @user_attributes = {name: 'Test User', password: 'Aa111111', password_confirmation: 'Aa111111'}
       @user_attributes['contact_attributes'] = contact.attributes
