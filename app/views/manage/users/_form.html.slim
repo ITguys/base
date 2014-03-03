@@ -1,0 +1,27 @@
+= form_for @user,url: [:manage, @user], html: { class: "form-horizontal", role: "form" }do |f|
+  = error_messages_for @user
+  .form-group
+    = f.label :email, class: "col-sm-2 control-label"
+    .col-sm-4
+      = f.email_field :email, class: "form-control", placeholder: "请填入数据", required: true
+  .form-group
+    = f.label :name, class: "col-sm-2 control-label"
+    .col-sm-4
+      = f.text_field :name, class: "form-control", placeholder: "请填入邮箱", required: true
+  = f.fields_for :contact, @user.contact || @user.build_contact do |c|
+    .form-group
+      .col-sm-offset-2.col-sm-6
+        = c.collection_radio_buttons :gender, { male: t('male'), female: t("female") }, :first, :last do |b|
+          = b.label(class: "radio-inline") { b.radio_button + b.text }
+    .form-group
+      = c.label :mobile_phone, class: "col-sm-2 control-label"
+      .col-sm-4
+        = c.phone_field :mobile_phone, class: "form-control", placeholder: "请填入手机"
+    .form-group
+      = c.label :birthday, class: "col-sm-2 control-label"
+      .col-sm-4
+        = c.date_field :birthday, class: "form-control", use_month_numbers: true
+    .form-group
+      .col-sm-offset-2.col-sm-4
+        = link_to t('cancel'), manage_users_path, class: "btn btn-default"
+        = button_tag t("submit"), class: "btn btn-primary", data: {disable_with: "Please wait..."}

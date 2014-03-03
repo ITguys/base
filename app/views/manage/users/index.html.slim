@@ -1,0 +1,23 @@
+= content_for :header do
+  h1 = t('users.index.header')
+table.table.table-striped
+  thead
+    tr
+      th ID
+      th= t('email')
+      th= t('name')
+      th
+  tbody
+    - @users.each do |user|
+      tr
+        td= user.id
+        td= user.email
+        td= user.name
+        td.col-sm-3
+          span.col-sm-4
+            = link_to t('edit'), edit_manage_user_path(user)
+          span.col-sm-4
+            = link_to t('delete'), manage_user_path(user), method: :delete, confirm: "Are you sure ?"
+hr
+.text-right
+  = paginate @users
