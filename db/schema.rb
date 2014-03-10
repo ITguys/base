@@ -28,10 +28,8 @@ ActiveRecord::Schema.define(version: 20140303145158) do
   end
 
   create_table "cities", force: true do |t|
-    t.string   "name"
-    t.string   "province_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string  "name"
+    t.integer "province_id"
   end
 
   create_table "contacts", force: true do |t|
@@ -55,10 +53,8 @@ ActiveRecord::Schema.define(version: 20140303145158) do
   end
 
   create_table "districts", force: true do |t|
-    t.string   "name"
-    t.string   "city_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string  "name"
+    t.integer "city_id"
   end
 
   create_table "postgis.spatial_ref_sys", id: false, force: true do |t|
@@ -74,7 +70,7 @@ ActiveRecord::Schema.define(version: 20140303145158) do
   end
 
 # Could not dump table "users" because of following NoMethodError
-#   undefined method `access_method' for #<RGeo::ActiveRecord::SpatialIndexDefinition:0x007feb9f485598>
+#   undefined method `access_method' for #<RGeo::ActiveRecord::SpatialIndexDefinition:0x007fd90d71d570>
 
   create_table "postgis.spatial_ref_sys", id: false, force: true do |t|
     t.integer "srid",                   null: false

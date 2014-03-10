@@ -3,9 +3,10 @@
 table.table.table-striped
   thead
     tr
-      th ID
-      th= t('email')
-      th= t('name')
+      th= link_to t('id'), manage_users_path(order_by: {id: (params[:order_by] && params[:order_by][:id].to_s.downcase == 'asc') ? :desc : :asc})
+      th= link_to t('email'), manage_users_path(order_by: {email: (params[:order_by] && params[:order_by][:email].to_s.downcase == 'asc') ? :desc : :asc})
+      th= link_to t('name'), manage_users_path(order_by: {name: (params[:order_by] && params[:order_by][:name].to_s.downcase == 'asc') ? :desc : :asc})
+      th= link_to t('created_at'), manage_users_path(order_by: {created_at: (params[:order_by] && params[:order_by][:created_at].to_s.downcase == 'asc') ? :desc : :asc})
       th
   tbody
     - @users.each do |user|
@@ -13,11 +14,12 @@ table.table.table-striped
         td= user.id
         td= user.email
         td= user.name
+        td= user.created_at
         td.col-sm-3
           span.col-sm-4
             = link_to t('edit'), edit_manage_user_path(user)
           span.col-sm-4
-            = link_to t('delete'), manage_user_path(user), method: :delete, confirm: "Are you sure ?"
+            = link_to t('delete'), manage_user_path(user), method: :delete, data: {confirm: "Are you sure ?"}
 hr
 .text-right
   = paginate @users

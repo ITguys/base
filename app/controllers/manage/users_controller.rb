@@ -1,8 +1,10 @@
 class Manage::UsersController < ApplicationController
   layout "manage/application"
-  filter_action :check_user, only: [ :show, :edit, :update, :destroy ]
+  before_action :check_user, only: [ :show, :edit, :update, :destroy ]
   def index
-    @users = User.order('updated_at DESC').page(params[:page]).per(AppConfig.paginate.per_page)
+    order_by = params[:order_by] || {created_at: :desc}
+    order_by = order_by.first.join(" ")
+    @users = User.order(order_by).page(params[:page]).per(AppConfig.paginate.per_page)
   end
 
   def show
@@ -43,7 +45,7 @@ class Manage::UsersController < ApplicationController
   private
 
     def check_user
-      @uesr = User.find(params[:id])
+      @user = User.find(params[:id])
     end
 
     def user_params

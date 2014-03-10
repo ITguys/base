@@ -9,17 +9,29 @@ describe Manage::UsersController do
   describe "GET 'index'" do
     it "display user list, render the index template" do
       10.times { create(:user) }
-      users = User.order('updated_at DESC').page(1).per(AppConfig.paginate.per_page)
+      users = User.order('created_at DESC').page(1).per(AppConfig.paginate.per_page).to_a
       get 'index'
-      expect(assigns[:users]).to eq(users)
+      expect(assigns[:users].to_a).to eq(users)
       expect(response).to render_template('index')
     end
 
     it 'display user list with page number' do
       20.times { create(:user) }
-      users = User.order('updated_at DESC').page(2).per(AppConfig.paginate.per_page)
+      users = User.order('created_at DESC').page(2).per(AppConfig.paginate.per_page).to_a
       get 'index', page: 2
-      expect(assigns[:users]).to eq(users)
+      expect(assigns[:users].to_a).to eq(users)
+    end
+
+    it "order users list by id, email, name, created_at" do
+      20.times { create(:user)}
+      %w(id email name created_at).each do |col|
+        asc_users = User.order("#{col}").page(1).per(AppConfig.paginate.per_page).to_a
+        desc_users = User.order("#{col} DESC").page(1).per(AppConfig.paginate.per_page).to_a
+        get 'index', order_by: {col => :asc}
+        expect(assigns[:users].to_a).to eq(asc_users)
+        get 'index', order_by: {col => :desc}
+        expect(assigns[:users].to_a).to eq(desc_users)
+      end
     end
   end
 
