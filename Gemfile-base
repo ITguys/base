@@ -17,8 +17,6 @@ gem 'jquery-rails'
 gem "sorcery", '~> 0.8.5'
 gem 'slim'
 
-gem 'turbolinks'
-
 gem 'kaminari'
 
 gem 'settingslogic'
@@ -42,6 +40,7 @@ group :development do
   gem 'guard-spork', '~> 1.5.1'
   gem 'spork-rails', github: 'sporkrb/spork-rails'
   gem 'rb-fsevent', '~> 0.9.3'
+  gem 'puma'
 	gem 'growl'
 end
 
