@@ -2,9 +2,16 @@ class Manage::UsersController < ApplicationController
   layout "manage/application"
   before_action :check_user, only: [ :show, :edit, :update, :destroy ]
   def index
+    query = params[:query]
+    p query
+    if query.present?
+      @users = User.search(Base::Utils.extract_search_options(query))
+    else
+      @users = User.all
+    end
     order_by = params[:order_by] || {created_at: :desc}
     order_by = order_by.first.join(" ")
-    @users = User.order(order_by).page(params[:page]).per(AppConfig.paginate.per_page)
+    @users = @users.order(order_by).page(params[:page]).per(AppConfig.paginate.per_page)
   end
 
   def show

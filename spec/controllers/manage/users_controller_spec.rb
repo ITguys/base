@@ -33,6 +33,12 @@ describe Manage::UsersController do
         expect(assigns[:users].to_a).to eq(desc_users)
       end
     end
+
+    it "search users by id, email, name" do
+      user = User.first
+      get 'index', query: "#{user.id}, #{user.email}, #{user.name}"
+      expect(assigns[:users].to_a).to eq([user])
+    end
   end
 
   describe "GET 'new'" do

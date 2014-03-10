@@ -3,10 +3,10 @@
 table.table.table-striped
   thead
     tr
-      th= link_to t('id'), manage_users_path(order_by: {id: (params[:order_by] && params[:order_by][:id].to_s.downcase == 'asc') ? :desc : :asc})
-      th= link_to t('email'), manage_users_path(order_by: {email: (params[:order_by] && params[:order_by][:email].to_s.downcase == 'asc') ? :desc : :asc})
-      th= link_to t('name'), manage_users_path(order_by: {name: (params[:order_by] && params[:order_by][:name].to_s.downcase == 'asc') ? :desc : :asc})
-      th= link_to t('created_at'), manage_users_path(order_by: {created_at: (params[:order_by] && params[:order_by][:created_at].to_s.downcase == 'asc') ? :desc : :asc})
+      th= link_to t('id'), manage_users_path(query: params[:query], order_by: {id: (params[:order_by] && params[:order_by][:id].to_s.downcase == 'asc') ? :desc : :asc})
+      th= link_to t('email'), manage_users_path(query: params[:query], order_by: {email: (params[:order_by] && params[:order_by][:email].to_s.downcase == 'asc') ? :desc : :asc})
+      th= link_to t('name'), manage_users_path(query: params[:query], order_by: {name: (params[:order_by] && params[:order_by][:name].to_s.downcase == 'asc') ? :desc : :asc})
+      th= link_to t('created_at'), manage_users_path(query: params[:query], order_by: {created_at: (params[:order_by] && params[:order_by][:created_at].to_s.downcase == 'asc') ? :desc : :asc})
       th
   tbody
     - @users.each do |user|

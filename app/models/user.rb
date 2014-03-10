@@ -14,6 +14,22 @@ class User < ActiveRecord::Base
   after_create :send_user_sets_password_notification
   after_update :check_and_send_user_updated_notification
 
+  scope :search, ->(query={}){
+    if query.present?
+      query.symbolize_keys!
+      uid = query[:id]
+      email = query[:email]
+      mobile_phone = query[:mobile_phone]
+      name = query[:name]
+      results = joins(:contact)
+      results = results.where(id: uid) unless uid.blank?
+      results = results.where("LOWER(users.email)=?", email.downcase) unless email.blank?
+      results = results.where("contacts.mobile_phone=?", mobile_phone) unless mobile_phone.blank?
+      results = results.where("LOWER(users.name) LIKE ?", "%#{name.downcase}%") unless name.blank?
+      results
+    end
+  }
+
   def locked
     lock_expires_at and lock_expires_at > Time.zone.now
   end
