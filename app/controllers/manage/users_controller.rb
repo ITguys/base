@@ -3,7 +3,6 @@ class Manage::UsersController < ApplicationController
   before_action :check_user, only: [ :show, :edit, :update, :destroy ]
   def index
     query = params[:query]
-    p query
     if query.present?
       @users = User.search(Base::Utils.extract_search_options(query))
     else
@@ -57,6 +56,10 @@ class Manage::UsersController < ApplicationController
 
     def user_params
       params.require(:user).permit(:name, :email, :password, :password_confirmation, :notify_user,
-                                   contact_attributes: [:mobile_phone, :birthday, :gender])
+                                   contact_attributes: [:id, :mobile_phone,
+                                    :birthday,
+                                    :gender,
+                                    addresses_attributes: [:id, :district_id, :detail]
+                                  ])
     end
 end

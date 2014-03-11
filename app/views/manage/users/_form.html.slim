@@ -21,6 +21,28 @@
       = c.label :birthday, class: "col-sm-2 control-label"
       .col-sm-4
         = c.date_field :birthday, class: "form-control", use_month_numbers: true
+    - if (addresses = c.object.addresses.includes(district: {city: [:districts, {province: :cities}]})).present?
+      - addresses.each do |address|
+        = c.fields_for :addresses, address do |address_fields|
+          .form-group
+            select class="addr_province"
+              = options_from_collection_for_select(Province.all, 'id', 'name', address.district.city.province_id.to_s)
+            select class="addr_city"
+              = options_from_collection_for_select(address.district.city.province.cities, 'id', 'name', address.district.city_id)
+            = address_fields.select :district_id, options_from_collection_for_select(address.district.city.districts, 'id', 'name', address.district_id), id: "addr_district"
+            = address_fields.text_field :detail, class: "form-control"
+    - else
+      .form-group
+        label.col-sm-2.control-label
+          = t('addresses')
+        .col-sm-6
+          = c.fields_for :addresses, c.object.addresses.new do |address_fields|
+              select class="addr_province"
+                option
+                = options_from_collection_for_select(Province.all, 'id', 'name', nil)
+              select class="addr_city"
+              = address_fields.select :district_id, [], {}, id: "addr_district"
+              = address_fields.text_field :detail, class: "form-control"
     .form-group
       .col-sm-offset-2.col-sm-4
         = link_to t('cancel'), manage_users_path, class: "btn btn-default"

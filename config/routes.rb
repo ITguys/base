@@ -7,6 +7,12 @@ Base::Application.routes.draw do
 
   resources :sessions, only: :create
   resources :password_resets, only: [:create, :update]
+  resources :addresses, only: [] do
+    member do
+      get 'cities'
+      get 'districts'
+    end
+  end
 
   namespace :manage do
     root 'application#index'
